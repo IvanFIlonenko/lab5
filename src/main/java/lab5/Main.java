@@ -35,7 +35,7 @@ public class Main {
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
                         }
                     } else {
-                        if (request.getUri())
+                        if (request.method() == HttpMethods.POST)
                     }
                 }
         )
