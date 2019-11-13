@@ -35,10 +35,12 @@ public class Main {
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
                         }
                     } else {
-                        if (request.method() == HttpMethods.POST)
+                        request.discardEntityBytes(materializer);
+                        return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
+
                     }
                 }
-        )
+        );
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost("localhost", 8080),
