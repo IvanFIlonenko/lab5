@@ -25,8 +25,17 @@ public class Main {
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
-                                    ByteString.fromString(""))
+                                    ByteString.fromString("<html><body>Main page!</body></html>"));
                         }
+                        if (request.getUri().path().equals("/test")) {
+                            return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
+                                    ByteString.fromString("<html><body>Test page!</body></html>"));
+                        } else {
+                            request.discardEntityBytes(materializer);
+                            return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
+                        }
+                    } else {
+                        if (request.getUri())
                     }
                 }
         )
