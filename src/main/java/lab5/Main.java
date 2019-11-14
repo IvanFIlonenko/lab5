@@ -16,6 +16,8 @@ import static org.asynchttpclient.Dsl.*;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 public class Main {
@@ -32,13 +34,16 @@ public class Main {
                             String url =  request.getUri().query().get("testUrl").get();
                             String count =  request.getUri().query().get("count").get();
                             AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
+                            long sum = 0;
                             for (int i=0; i<Integer.parseInt(count); i++){
-                                
+                                long start = System.nanoTime();
+                                ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
+                                Response response = whenResponse.get();
+                                long elapsedTime = System.nanoTime() - start;
+                                sum +=elapsedTime;
                             }
-                            ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
-                            Response response = whenResponse.get();
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
-                                    ByteString.fromString(url + " " + count));
+                                    ByteString.fromString(sum/20 + " "));
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
