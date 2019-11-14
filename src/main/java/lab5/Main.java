@@ -60,9 +60,13 @@ public class Main {
                                                                 int responseTime = (int) (System.currentTimeMillis() - element.second());
                                                                 return accumulator + responseTime;
                                                             });
+                                                    map(request2 -> new Pair<>(request2, System.currentTimeMillis())).via(httpClient)
                                                     return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
-                                                            map(request2 -> new Pair<>(request2, System.currentTimeMillis())).via(httpClient).toMat(
+                                                            mapAsync(1, request2 ->{
+                                                                
+                                                            })
+                                                            .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
                                                 }).map(sum -> {
                                                     Double middleValue = (double)sum/(double)count;
