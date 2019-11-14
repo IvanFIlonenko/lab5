@@ -43,7 +43,7 @@ public class Main {
                                 sum +=elapsedTime;
                             }
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
-                                    ByteString.fromString(sum/20 + " "));
+                                    ByteString.fromString((sum/20)/1000000000 + " "));
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
