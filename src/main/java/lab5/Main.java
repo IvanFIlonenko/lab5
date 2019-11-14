@@ -84,7 +84,7 @@ public class Main {
                                 CompletionStage<HttpResponse> result = source.via(flow).toMat(Sink.last(), Keep.right()).run(materializer);
                                 return result.toCompletableFuture().get();
                             } catch (Exception e) {
-                                return HttpResponse.create().withEntity(ByteString.fromString("count is not an integer"));
+                                return HttpResponse.create().withEntity(ByteString.fromString(e.toString()));
                             }
                         } else {
                             request.discardEntityBytes(materializer);
