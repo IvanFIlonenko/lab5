@@ -66,6 +66,7 @@ public class Main {
                                                             mapAsync(1, request2 ->{
                                                                 CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> System.nanoTime())
                                                                         .thenCompose(start -> CompletableFuture.supplyAsync(() -> {
+                                                                            System.out.println(equest2.getUri().toString());
                                                                             ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.getUri().toString()).execute();
                                                                             try {
                                                                                 Response response = whenResponse.get();
