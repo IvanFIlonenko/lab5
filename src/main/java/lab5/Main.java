@@ -10,6 +10,7 @@ import akka.http.javadsl.model.*;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import akka.util.ByteString;
 import com.sun.tools.javac.util.Pair;
@@ -51,7 +52,12 @@ public class Main {
                                                 mapAsync(1, pair -> {
                                                     Flow<Pair<HttpRequest, Long>, Pair<Try<HttpResponse>, Long>, NotUsed> httpClient =
                                                             http.superPool(materializer);
-                                                    
+                                                    Sink<Pair<Try<HttpResponse>, Long>, CompletionStage<Integer>> fold = Sink.fold(0,
+                                                            (accumulator, element) -> {
+                                                                int responseTime = (int) (System.currentTimeMillis() - element.snd);
+                                                                return accumulator + responseTime;
+                                                            });
+                                                    return;
                                                 })
                             }
                         } else {
