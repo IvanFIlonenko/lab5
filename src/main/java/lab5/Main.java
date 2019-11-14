@@ -53,6 +53,7 @@ public class Main {
                             int count =  Integer.parseInt(request.getUri().query().get("count").get());
                             Pair<String, Integer> data = new Pair<>(url,count);
                             try {
+                                boolean flag = false;
                                 Source<Pair<String, Integer>, NotUsed> source = Source.from(Collections.singleton(data));
                                 Flow<Pair<String, Integer>, HttpResponse, NotUsed> flow = Flow.<Pair<String, Integer>>create()
                                         .map(pair -> new Pair<>(HttpRequest.create().
@@ -86,7 +87,6 @@ public class Main {
                                                                                             }
                                                                                             return System.currentTimeMillis() - start;
                                                                                         }));
-                                                                        Patterns.ask(controlActor, new PutDataMsg(new  javafx.util.Pair<String,javafx.util.Pair<Integer, Integer>>(data.first(), new javafx.util.Pair<Integer, Integer>(data.second(), future.get()))), 5000);
                                                                         return future;
                                                                     })
                                                                     .toMat(fold, Keep.right()), Keep.right()).run(materializer);
