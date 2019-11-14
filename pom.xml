@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.asynchttpclient</groupId>
             <artifactId>async-http-client</artifactId>
-            <version>1.8.</version>
+            <version>1.8.0_181</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
