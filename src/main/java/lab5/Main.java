@@ -45,7 +45,7 @@ public class Main {
                             try {
                                 Source<Pair<String, Integer>, NotUsed> source = Source.from(Collections.singleton(pair));
                                 Flow<Pair<String, Integer>, HttpResponse, NotUsed> flow = Flow.<Pair<String, Integer>>create()
-                                        .map(p -> HttpRequest.create().withUri(p.first(), p.snd))
+                                        .map(p -> new Pair<>(HttpRequest.create().withUri()))
                             }
                         } else {
                             request.discardEntityBytes(materializer);
