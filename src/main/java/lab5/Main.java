@@ -66,14 +66,14 @@ public class Main {
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
                                                                 CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> System.nanoTime())
-                                                                        .thenCompose(start -> {
+                                                                        .thenCompose(start -> CompletableFuture.supplyAsync(() -> {
                                                                             ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
                                                                             try {
                                                                                 Response response = whenResponse.get();
                                                                             } catch (InterruptedException | ExecutionException e) {
                                                                             }
-                                                                            return new Completed();
-                                                                        });
+                                                                            return System.nanoTime() - start;
+                                                                        }));
                                                             })
                                                             .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
