@@ -22,12 +22,12 @@ public class Main {
                 ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = Flow.of(HttpRequest.class).map(
                 request -> {
-                    String Url =  request.getUri().query().get("testUrl").get();
-                    String Count =  request.getUri().query().get("count").get();
+                    String url =  request.getUri().query().get("testUrl").get();
+                    String count =  request.getUri().query().get("count").get();
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
-                                    ByteString.fromString(Url + " " + Count));
+                                    ByteString.fromString(url + " " + count));
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
