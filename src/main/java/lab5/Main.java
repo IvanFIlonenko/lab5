@@ -65,7 +65,9 @@ public class Main {
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
                                                 }).map(sum -> {
                                                     Double middleValue = (double)sum/(double)count;
-                                        })
+                                                    return HttpResponse.create().withEntity(ByteString.fromString(middleValue.toString()));
+                                        });
+                                
                             }
                         } else {
                             request.discardEntityBytes(materializer);
