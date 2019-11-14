@@ -63,11 +63,11 @@ public class Main {
                                                     return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
-                                                                CompletableFuture<Long>
                                                                 long start = System.nanoTime();
                                                                 ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
                                                                 Response response = whenResponse.get();
                                                                 long elapsedTime = System.nanoTime() - start;
+                                                                CompletableFuture<Long> future = respo
                                                             })
                                                             .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
