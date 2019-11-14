@@ -1,10 +1,10 @@
 package lab5;
 
-import com.sun.tools.javac.util.Pair;
+import javafx.util.Pair;
 
-public class getDataMsg {
+public class GetDataMsg {
     private Pair<String, Integer> msg;
-    public getDataMsg(Pair<String, Integer> msg){
+    public GetDataMsg(Pair<String, Integer> msg){
         this.msg = msg;
     }
 
