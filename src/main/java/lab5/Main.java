@@ -23,7 +23,7 @@ public class Main {
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = Flow.of(HttpRequest.class).map(
                 request -> {
                     if(request.method() == HttpMethods.GET) {
-                        request.get
+                        request.
                         if (request.getUri().path().equals("/")) {
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
                                     ByteString.fromString("<html><body>Main page!</body></html>"));
