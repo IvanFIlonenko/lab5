@@ -71,7 +71,6 @@ public class Main {
                                                                                 Response response = whenResponse.get();
                                                                             } catch (InterruptedException | ExecutionException e) {
                                                                             }
-                                                                            return System.nanoTime() - start;
                                                                         });
                                                             })
                                                             .toMat(
