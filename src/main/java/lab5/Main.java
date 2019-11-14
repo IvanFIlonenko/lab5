@@ -64,17 +64,8 @@ public class Main {
                                                     return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
-                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> {
-                                                                    long start = System.nanoTime();
-                                                                    ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
-                                                                    try {
-                                                                        Response response = whenResponse.get();
-                                                                    } catch (InterruptedException | ExecutionException e) {
-                                                                    }
-                                                                    return start;
-                                                                });
-                                                                CompletableFuture<Long> f = future.thenCompose(start -> 
-                                                                })
+                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> System.nanoTime())
+                                                                        .thenCompose(start -> );
                                                             })
                                                             .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
