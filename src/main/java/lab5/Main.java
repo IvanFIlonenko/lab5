@@ -25,7 +25,7 @@ public class Main {
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
-                                    ByteString.fromString(request.toString()));
+                                    ByteString.fromString(request.withMethod(HttpMethods.GET).toString()));
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
