@@ -52,26 +52,31 @@ public class Main {
                             try {
                                 Source<Pair<String, Integer>, NotUsed> source = Source.from(Collections.singleton(data));
                                 Flow<Pair<String, Integer>, HttpResponse, NotUsed> flow = Flow.<Pair<String, Integer>>create()
-                                        .map(pair -> new Pair<>(HttpRequest.create().withUri(pair.first()), pair.second())).
+                                        .map(pair -> new Pair<>(HttpRequest.create().
+                                                withUri(pair.first()), pair.second())).
                                                 mapAsync(1, pair -> {
                                                     Sink<Long, CompletionStage<Integer>> fold = Sink.fold(0,
                                                             (accumulator, element) -> {
                                                                 int responseTime = (int) (0 + element);
                                                                 return accumulator + responseTime;
                                                             });
-                                                    return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
+                                                    return Source.from(Collections.singleton(pair)).
+                                                            toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
-                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> System.currentTimeMillis())
-                                                                        .thenCompose(start -> CompletableFuture.supplyAsync(() -> {
-                                                                            ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.getUri().toString()).execute();
-                                                                            try {
-                                                                                Response response = whenResponse.get();
-                                                                            } catch (InterruptedException | ExecutionException e) {
-                                                                                System.out.println(e);
-                                                                            }
-                                                                            return System.currentTimeMillis() - start;
-                                                                        }));
+                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() ->
+                                                                        System.currentTimeMillis())
+                                                                        .thenCompose(start ->
+                                                                                CompletableFuture.supplyAsync(() -> {
+                                                                                    ListenableFuture<Response> whenResponse = asyncHttpClient().
+                                                                                            prepareGet(request2.getUri().toString()).execute();
+                                                                                    try {
+                                                                                        Response response = whenResponse.get();
+                                                                                    } catch (InterruptedException | ExecutionException e) {
+                                                                                        System.out.println(e);
+                                                                                    }
+                                                                                    return System.currentTimeMillis() - start;
+                                                                                }));
                                                                 return future;
                                                             })
                                                             .toMat(fold, Keep.right()), Keep.right()).run(materializer);
