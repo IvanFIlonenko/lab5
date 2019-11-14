@@ -69,7 +69,9 @@ public class Main {
                                         });
                                 CompletionStage<HttpResponse> result = source.via(flow).toMat(Sink.last(), Keep.right()).run(materializer);
                                 return result.toCompletableFuture().get();
-                            } catch ()
+                            } catch (NumberFormatException e) {
+                                return 
+                            }
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
