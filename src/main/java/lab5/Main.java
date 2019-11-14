@@ -58,7 +58,7 @@ public class Main {
                                                                 int responseTime = (int) (System.currentTimeMillis() - element.second());
                                                                 return accumulator + responseTime;
                                                             });
-                                                    Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
+                                                    return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             map(request2 -> new Pair<>(request2, System.currentTimeMillis())).via(httpClient).toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
