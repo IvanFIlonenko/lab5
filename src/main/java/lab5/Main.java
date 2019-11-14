@@ -23,11 +23,11 @@ public class Main {
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = Flow.of(HttpRequest.class).map(
                 request -> {
                     String Url =  request.getUri().query().get("testUrl").get();
-                    String Count =  request.getUri().query().get("testUrl").get();
+                    String Count =  request.getUri().query().get("count").get();
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
-                                    ByteString.fromString(request.getUri().query().get("packageId").get()));
+                                    ByteString.fromString(Url + " " + Count));
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
