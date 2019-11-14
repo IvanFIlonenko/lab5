@@ -64,32 +64,32 @@ public class Main {
                                                                 return accumulator + responseTime;
                                                             });
                                                     Future<Object> result = Patterns.
-                                                            ask(controlActor, new GetDataMsg(new  javafx.util.Pair<String, Integer>(data.first(), data.second())), 5000);
-                                                    int value = (int)Await.result(result, Duration.create(10, TimeUnit.SECONDS));
-                                                    if (value != -1){
+                                                            ask(controlActor, new GetDataMsg(new javafx.util.Pair<String, Integer>(data.first(), data.second())), 5000);
+                                                    int value = (int) Await.result(result, Duration.create(10, TimeUnit.SECONDS));
+                                                    if (value != -1) {
                                                         return CompletableFuture.completedFuture(value);
                                                     }
                                                     return Source.from(Collections.singleton(pair)).
                                                             toMat(Flow.<Pair<HttpRequest, Integer>>create().
-                                                            mapConcat(p -> Collections.nCopies(p.second(), p.first())).
-                                                            mapAsync(1, request2 ->{
-                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() ->
-                                                                        System.currentTimeMillis())
-                                                                        .thenCompose(start ->
-                                                                                CompletableFuture.supplyAsync(() -> {
-                                                                                    ListenableFuture<Response> whenResponse = asyncHttpClient().
-                                                                                            prepareGet(request2.getUri().toString()).execute();
-                                                                                    try {
-                                                                                        Response response = whenResponse.get();
-                                                                                    } catch (InterruptedException | ExecutionException e) {
-                                                                                        System.out.println(e);
-                                                                                    }
-                                                                                    return System.currentTimeMillis() - start;
-                                                                                }));
-                                                                Patterns.ask(controlActor, new PutDataMsg(new  javafx.util.Pair<String,Pair<Integer, Integer>>(data.first(), data.second())), 5000);
-                                                                return future;
-                                                            })
-                                                            .toMat(fold, Keep.right()), Keep.right()).run(materializer);
+                                                                    mapConcat(p -> Collections.nCopies(p.second(), p.first())).
+                                                                    mapAsync(1, request2 -> {
+                                                                        CompletableFuture<Long> future = CompletableFuture.supplyAsync(() ->
+                                                                                System.currentTimeMillis())
+                                                                                .thenCompose(start ->
+                                                                                        CompletableFuture.supplyAsync(() -> {
+                                                                                            ListenableFuture<Response> whenResponse = asyncHttpClient().
+                                                                                                    prepareGet(request2.getUri().toString()).execute();
+                                                                                            try {
+                                                                                                Response response = whenResponse.get();
+                                                                                            } catch (InterruptedException | ExecutionException e) {
+                                                                                                System.out.println(e);
+                                                                                            }
+                                                                                            return System.currentTimeMillis() - start;
+                                                                                        }));
+                                                                        Patterns.ask(controlActor, new PutDataMsg(new  javafx.util.Pair<String,javafx.util.Pair<Integer, Integer>>(data.first(), new javafx.util.Pair<Integer, Integer>(data.second(), future.get()))), 5000);
+                                                                        return future;
+                                                                    })
+                                                                    .toMat(fold, Keep.right()), Keep.right()).run(materializer);
                                                 }).map(sum -> {
                                                     Double middleValue = (double)sum/(double)count;
                                                     return HttpResponse.create().withEntity(ByteString.fromString(middleValue.toString()));
