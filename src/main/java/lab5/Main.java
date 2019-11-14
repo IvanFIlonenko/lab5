@@ -35,6 +35,7 @@ public class Main {
                             String url =  request.getUri().query().get("testUrl").get();
                             int count =  Integer.parseInt(request.getUri().query().get("count").get());
                             Pair<String, Integer> pair = new Pair<>(url,count);
+                            Flow.create()
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
                                     ByteString.fromString("kek"));
                         } else {
@@ -47,7 +48,7 @@ public class Main {
 
                     }
                 }
-        ).mapAsync();
+        )
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost("localhost", 8080),
