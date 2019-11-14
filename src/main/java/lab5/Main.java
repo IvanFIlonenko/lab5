@@ -30,7 +30,7 @@ public class Main {
                     String url =  request.getUri().query().get("testUrl").get();
                     String count =  request.getUri().query().get("count").get();
                     AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
-                    Future<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
+                    ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
                     Response response = whenResponse.get();
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
