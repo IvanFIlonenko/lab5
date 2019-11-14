@@ -67,8 +67,7 @@ public class Main {
                                                             ask(controlActor, new GetDataMsg(new  javafx.util.Pair<String, Integer>(data.first(), data.second())), 5000);
                                                     int value = (int)Await.result(result, Duration.create(10, TimeUnit.SECONDS));
                                                     if (value != -1){
-                                                        CompletableFuture<Long> out = value;
-                                                        return;
+                                                        return CompletableFuture.completedFuture(value);
                                                     }
                                                     return Source.from(Collections.singleton(pair)).
                                                             toMat(Flow.<Pair<HttpRequest, Integer>>create().
@@ -87,6 +86,7 @@ public class Main {
                                                                                     }
                                                                                     return System.currentTimeMillis() - start;
                                                                                 }));
+                                                                Patterns.ask(controlActor, new PutDataMsg(new  javafx.util.Pair<String, javafx.util.Pair<Integer, Integer>>(data.first(), data.second())), 5000);
                                                                 return future;
                                                             })
                                                             .toMat(fold, Keep.right()), Keep.right()).run(materializer);
