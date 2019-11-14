@@ -41,11 +41,14 @@ public class Main {
                         if (request.getUri().path().equals("/")) {
                             String url =  request.getUri().query().get("testUrl").get();
                             int count =  Integer.parseInt(request.getUri().query().get("count").get());
-                            Pair<String, Integer> pair = new Pair<>(url,count);
+                            Pair<String, Integer> p = new Pair<>(url,count);
                             try {
-                                Source<Pair<String, Integer>, NotUsed> source = Source.from(Collections.singleton(pair));
+                                Source<Pair<String, Integer>, NotUsed> source = Source.from(Collections.singleton(p));
                                 Flow<Pair<String, Integer>, HttpResponse, NotUsed> flow = Flow.<Pair<String, Integer>>create()
-                                        .map(p -> new Pair<>(HttpRequest.create().withUri()))
+                                        .map(pair -> new Pair<>(HttpRequest.create().withUri(pair.fst), pair.snd)).
+                                                mapAsync(1, pair -> {
+                                                    
+                                                })
                             }
                         } else {
                             request.discardEntityBytes(materializer);
