@@ -70,7 +70,7 @@ public class Main {
                                 CompletionStage<HttpResponse> result = source.via(flow).toMat(Sink.last(), Keep.right()).run(materializer);
                                 return result.toCompletableFuture().get();
                             } catch (NumberFormatException e) {
-                                return 
+                                return HttpResponse.create().withEntity(ByteString.fromString("count is not an integer"));
                             }
                         } else {
                             request.discardEntityBytes(materializer);
@@ -82,7 +82,7 @@ public class Main {
 
                     }
                 }
-        )
+        );
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost("localhost", 8080),
