@@ -33,17 +33,9 @@ public class Main {
                         if (request.getUri().path().equals("/")) {
                             String url =  request.getUri().query().get("testUrl").get();
                             String count =  request.getUri().query().get("count").get();
-                            AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
-                            long sum = 0;
-                            for (int i=0; i<Integer.parseInt(count); i++){
-                                long start = System.nanoTime();
-                                ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
-                                Response response = whenResponse.get();
-                                long elapsedTime = System.nanoTime() - start;
-                                sum +=elapsedTime;
-                            }
+
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
-                                    ByteString.fromString((sum/20)/1000000 + " "));
+                                    ByteString.fromString("kek"));
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
