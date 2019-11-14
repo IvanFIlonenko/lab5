@@ -40,7 +40,7 @@ public class Main {
                             String url =  request.getUri().query().get("testUrl").get();
                             int count =  Integer.parseInt(request.getUri().query().get("count").get());
                             Pair<String, Integer> pair = new Pair<>(url,count);
-                            
+                            CompletionStage
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
                                     ByteString.fromString("kek"));
                         } else {
