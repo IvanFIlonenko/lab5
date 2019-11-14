@@ -86,7 +86,7 @@ public class Main {
                                                                                     }
                                                                                     return System.currentTimeMillis() - start;
                                                                                 }));
-                                                                Patterns.ask(controlActor, new PutDataMsg(new  javafx.util.Pair<String, javafx.util.Pair<Integer, Integer>>(data.first(), data.second())), 5000);
+                                                                Patterns.ask(controlActor, new PutDataMsg(new  javafx.util.Pair<String,Pair<Integer, Integer>>(data.first(), data.second())), 5000);
                                                                 return future;
                                                             })
                                                             .toMat(fold, Keep.right()), Keep.right()).run(materializer);
