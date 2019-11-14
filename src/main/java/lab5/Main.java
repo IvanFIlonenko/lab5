@@ -9,6 +9,7 @@ import akka.http.javadsl.model.*;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import akka.util.ByteString;
+import com.sun.tools.javac.util.Pair;
 import org.asynchttpclient.Response;
 import scala.concurrent.Future;
 import org.asynchttpclient.*;
@@ -32,8 +33,8 @@ public class Main {
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
                             String url =  request.getUri().query().get("testUrl").get();
-                            String count =  request.getUri().query().get("count").get();
-
+                            int count =  Integer.parseInt(request.getUri().query().get("count").get());
+                            Pair<String, Integer> pair = new Pair<>(url,count);
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
                                     ByteString.fromString("kek"));
                         } else {
@@ -46,7 +47,7 @@ public class Main {
 
                     }
                 }
-        );
+        ).mapAsync();
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost("localhost", 8080),
