@@ -62,7 +62,8 @@ public class Main {
                                                     return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
-                                                                ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
+                                                                
+                                                                ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
                                                                 Response response = whenResponse.get();
                                                             })
                                                             .toMat(
