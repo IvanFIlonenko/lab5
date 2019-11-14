@@ -63,7 +63,9 @@ public class Main {
                                                             mapConcat(p -> Collections.nCopies(p.snd, p.fst)).
                                                             map(request2 -> new Pair<>(request2, System.currentTimeMillis())).via(httpClient).toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
-                                                }).map()
+                                                }).map(sum -> {
+                                                    Double middleValue = (double)sum/(double)count;
+                                        })
                             }
                         } else {
                             request.discardEntityBytes(materializer);
