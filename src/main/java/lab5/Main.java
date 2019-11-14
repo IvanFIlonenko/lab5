@@ -16,6 +16,8 @@ import com.sun.tools.javac.util.Pair;
 import org.asynchttpclient.Response;
 import scala.concurrent.Future;
 import org.asynchttpclient.*;
+import scala.util.Try;
+
 import static org.asynchttpclient.Dsl.*;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
