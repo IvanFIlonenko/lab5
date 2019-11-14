@@ -53,6 +53,8 @@ public class Main {
                                                 mapAsync(1, pair -> {
                                                     Flow<Pair<HttpRequest, Long>, Pair<Try<HttpResponse>, Long>, NotUsed> httpClient =
                                                             http.superPool(materializer);
+                                                    ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
+                                                    Response response = whenResponse.get();
                                                     Sink<Pair<Try<HttpResponse>, Long>, CompletionStage<Integer>> fold = Sink.fold(0,
                                                             (accumulator, element) -> {
                                                                 int responseTime = (int) (System.currentTimeMillis() - element.second());
