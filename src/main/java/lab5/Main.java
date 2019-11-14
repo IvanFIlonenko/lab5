@@ -56,12 +56,11 @@ public class Main {
                                                 mapAsync(1, pair -> {
                                                     Flow<Pair<HttpRequest, Long>, Pair<Try<HttpResponse>, Long>, NotUsed> httpClient =
                                                             http.superPool();
-                                                    Sink<Pair<Try<HttpResponse>, Long>, CompletionStage<Integer>> fold = Sink.fold(0,
+                                                    Sink<Long, CompletionStage<Integer>> fold = Sink.fold(0,
                                                             (accumulator, element) -> {
-                                                                int responseTime = (int) (System.currentTimeMillis() - element.second());
+                                                                int responseTime = (int) (0 + element);
                                                                 return accumulator + responseTime;
                                                             });
-                                                    map(request2 -> new Pair<>(request2, System.currentTimeMillis())).via(httpClient)
                                                     return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
@@ -74,9 +73,9 @@ public class Main {
                                                                             }
                                                                             return System.nanoTime() - start;
                                                                         }));
+                                                                return future;
                                                             })
-                                                            .toMat(
-                                                                    fold, Keep.right()), Keep.right()).run(materializer);
+                                                            .toMat(fold, Keep.right()), Keep.right()).run(materializer);
                                                 }).map(sum -> {
                                                     Double middleValue = (double)sum/(double)count;
                                                     return HttpResponse.create().withEntity(ByteString.fromString(middleValue.toString()));
