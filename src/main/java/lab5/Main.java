@@ -12,6 +12,7 @@ import akka.util.ByteString;
 import org.asynchttpclient.Response;
 import scala.concurrent.Future;
 import org.asynchttpclient.*;
+import static org.asynchttpclient.Dsl.*;
 
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
@@ -27,7 +28,7 @@ public class Main {
                 request -> {
                     String url =  request.getUri().query().get("testUrl").get();
                     String count =  request.getUri().query().get("count").get();
-                    Future<Response> whenResponse = 
+                    Future<Response> whenResponse = asyncHttpClient.prepareGet("http://www.example.com/").execute();
                     Response response = whenResponse.get();
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
