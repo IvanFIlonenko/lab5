@@ -10,6 +10,7 @@ import akka.http.javadsl.model.*;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import akka.util.ByteString;
@@ -60,8 +61,9 @@ public class Main {
                                                     return;
                                                     Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.snd, p.fst)).
-                                                            map(request2 -> new Pair<>(request2, System.currentTimeMillis())))
-                                                })
+                                                            map(request2 -> new Pair<>(request2, System.currentTimeMillis())).via(httpClient).toMat(
+                                                                    fold, Keep.right()), Keep.right()).run(materializer);
+                                                }).map()
                             }
                         } else {
                             request.discardEntityBytes(materializer);
