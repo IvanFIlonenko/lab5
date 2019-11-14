@@ -67,8 +67,9 @@ public class Main {
                                                     Double middleValue = (double)sum/(double)count;
                                                     return HttpResponse.create().withEntity(ByteString.fromString(middleValue.toString()));
                                         });
-                                
-                            }
+                                CompletionStage<HttpResponse> result = source.via(flow).toMat(Sink.last(), Keep.right()).run(materializer);
+                                return result.toCompletableFuture().get();
+                            } catch ()
                         } else {
                             request.discardEntityBytes(materializer);
                             return HttpResponse.create().withStatus(StatusCodes.NOT_FOUND).withEntity("NO");
