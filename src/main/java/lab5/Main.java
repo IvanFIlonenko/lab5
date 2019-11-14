@@ -60,6 +60,7 @@ public class Main {
                                                                 int responseTime = (int) (0 + element);
                                                                 return accumulator + responseTime;
                                                             });
+                                                    Future<Object> result = Patterns.ask(controlActor, new GetResult(Integer.parseInt(packageId)), 5000);
                                                     return Source.from(Collections.singleton(pair)).
                                                             toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
