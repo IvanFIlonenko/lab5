@@ -74,7 +74,7 @@ public class Main {
                                                                     long elapsedTime = System.nanoTime() - start;
                                                                     return elapsedTime;
                                                                 });
-
+                                                                CompletableFuture<Void> f = future.thenAccept()
                                                             })
                                                             .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
