@@ -64,7 +64,7 @@ public class Main {
                                                     return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
-                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> System.nanoTime())
+                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> System.currentTimeMillis())
                                                                         .thenCompose(start -> CompletableFuture.supplyAsync(() -> {
                                                                             ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.getUri().toString()).execute();
                                                                             try {
@@ -72,7 +72,7 @@ public class Main {
                                                                             } catch (InterruptedException | ExecutionException e) {
                                                                                 System.out.println("kek");
                                                                             }
-                                                                            return System.nanoTime() - start;
+                                                                            return System.currentTimeMillis() - start;
                                                                         }));
                                                                 return future;
                                                             })
