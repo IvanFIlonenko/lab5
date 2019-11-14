@@ -69,7 +69,7 @@ public class Main {
                                                                     ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
                                                                     try {
                                                                         Response response = whenResponse.get();
-                                                                    } catch (InterruptedException e) {
+                                                                    } catch (InterruptedException | ExecutionException e) {
                                                                     }
                                                                     long elapsedTime = System.nanoTime() - start;
                                                                     return elapsedTime;
