@@ -73,9 +73,7 @@ public class Main {
                                                                     }
                                                                     return start;
                                                                 });
-                                                                CompletableFuture<Long> f = future.thenCompose(job -> {
-                                                                    long elapsedTime = System.nanoTime() - start;
-                                                                    return elapsedTime;
+                                                                CompletableFuture<Long> f = future.thenCompose(start -> 
                                                                 })
                                                             })
                                                             .toMat(
