@@ -8,7 +8,11 @@ public class GetDataMsg {
         this.msg = msg;
     }
 
-    public Pair<String, Integer> getMsg(){
-        return msg;
+    public String getUrl(){
+        return msg.getKey();
+    }
+
+    public Integer getValue(){
+        return msg.getValue();
     }
 }
