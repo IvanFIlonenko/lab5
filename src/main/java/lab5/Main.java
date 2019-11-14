@@ -65,7 +65,7 @@ public class Main {
                                                                 long start = System.nanoTime();
                                                                 ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
                                                                 Response response = whenResponse.get();
-                                                                
+                                                                long elapsedTime = System.nanoTime() - start;
                                                             })
                                                             .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
