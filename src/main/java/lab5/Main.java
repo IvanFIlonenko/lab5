@@ -13,6 +13,7 @@ import org.asynchttpclient.Response;
 import scala.concurrent.Future;
 import org.asynchttpclient.*;
 import static org.asynchttpclient.Dsl.*;
+import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
@@ -28,7 +29,9 @@ public class Main {
                 request -> {
                     String url =  request.getUri().query().get("testUrl").get();
                     String count =  request.getUri().query().get("count").get();
+                    AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
                     Future<Response> whenResponse = asyncHttpClient.prepareGet("http://www.example.com/").execute();
+                    asyncHttpClient
                     Response response = whenResponse.get();
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
