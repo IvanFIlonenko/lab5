@@ -10,6 +10,7 @@ import akka.http.javadsl.model.*;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import akka.stream.javadsl.Source;
 import akka.util.ByteString;
 import com.sun.tools.javac.util.Pair;
 import org.asynchttpclient.Response;
@@ -20,6 +21,7 @@ import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.regex.Pattern;
@@ -41,7 +43,8 @@ public class Main {
                             int count =  Integer.parseInt(request.getUri().query().get("count").get());
                             Pair<String, Integer> pair = new Pair<>(url,count);
                             try {
-                                Source<>
+                                Source<Pair<String, Integer>, NotUsed> source = Source.from(Collections.singleton(pair));
+                                Flow<Pair<String, Integer>, HttpResponse, NotUsed> flow =
                             }
                         } else {
                             request.discardEntityBytes(materializer);
