@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class Main {
@@ -64,7 +65,11 @@ public class Main {
                                                             });
                                                     Future<Object> result = Patterns.
                                                             ask(controlActor, new GetDataMsg(new  javafx.util.Pair<String, Integer>(data.first(), data.second())), 5000);
-                                                    int value = Await.result(result, Duration.)
+                                                    int value = (int)Await.result(result, Duration.create(10, TimeUnit.SECONDS));
+                                                    if (value != -1){
+                                                        CompletableFuture<Long> out = value;
+                                                        return;
+                                                    }
                                                     return Source.from(Collections.singleton(pair)).
                                                             toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
