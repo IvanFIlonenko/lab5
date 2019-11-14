@@ -22,6 +22,7 @@ public class Main {
                 ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = Flow.of(HttpRequest.class).map(
                 request -> {
+                    String Url =  request.getUri().query().get("packageId").get();
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
