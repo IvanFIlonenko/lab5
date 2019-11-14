@@ -67,7 +67,7 @@ public class Main {
                                                                 ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
                                                                 Response response = whenResponse.get();
                                                                 long elapsedTime = System.nanoTime() - start;
-                                                                CompletableFuture<Long> future = respo
+                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync()
                                                             })
                                                             .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
