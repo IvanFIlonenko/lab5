@@ -27,13 +27,16 @@ public class Main {
                 ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = Flow.of(HttpRequest.class).map(
                 request -> {
-                    String url =  request.getUri().query().get("testUrl").get();
-                    String count =  request.getUri().query().get("count").get();
-                    AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
-                    ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
-                    Response response = whenResponse.get();
                     if(request.method() == HttpMethods.GET) {
                         if (request.getUri().path().equals("/")) {
+                            String url =  request.getUri().query().get("testUrl").get();
+                            String count =  request.getUri().query().get("count").get();
+                            AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
+                            for (int i=0; i<Integer.parseInt(count); i++){
+                                
+                            }
+                            ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
+                            Response response = whenResponse.get();
                             return HttpResponse.create().withEntity(ContentTypes.TEXT_HTML_UTF8,
                                     ByteString.fromString(url + " " + count));
                         } else {
