@@ -71,6 +71,7 @@ public class Main {
                                                                                 Response response = whenResponse.get();
                                                                             } catch (InterruptedException | ExecutionException e) {
                                                                             }
+                                                                            Completed
                                                                         });
                                                             })
                                                             .toMat(
