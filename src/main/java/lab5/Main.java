@@ -70,6 +70,7 @@ public class Main {
                                                                             try {
                                                                                 Response response = whenResponse.get();
                                                                             } catch (InterruptedException | ExecutionException e) {
+                                                                                System.out.println("kek");
                                                                             }
                                                                             return System.nanoTime() - start;
                                                                         }));
