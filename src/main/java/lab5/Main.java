@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 public class Main {
@@ -63,11 +64,17 @@ public class Main {
                                                     return Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             mapAsync(1, request2 ->{
-                                                                long start = System.nanoTime();
-                                                                ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
-                                                                Response response = whenResponse.get();
-                                                                long elapsedTime = System.nanoTime() - start;
-                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync()
+                                                                CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> {
+                                                                    long start = System.nanoTime();
+                                                                    ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet(request2.toString()).execute();
+                                                                    try {
+                                                                        Response response = whenResponse.get();
+                                                                    } catch (InterruptedException e) {
+                                                                    }
+                                                                    long elapsedTime = System.nanoTime() - start;
+                                                                    return elapsedTime;
+                                                                });
+
                                                             })
                                                             .toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
