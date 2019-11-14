@@ -52,7 +52,7 @@ public class Main {
                                         .map(pair -> new Pair<>(HttpRequest.create().withUri(pair.first()), pair.second())).
                                                 mapAsync(1, pair -> {
                                                     Flow<Pair<HttpRequest, Long>, Pair<Try<HttpResponse>, Long>, NotUsed> httpClient =
-                                                            http.superPool(materializer);
+                                                            http.superPool();
                                                     ListenableFuture<Response> whenResponse = asyncHttpClient().prepareGet("http://www.example.com/").execute();
                                                     Response response = whenResponse.get();
                                                     Sink<Pair<Try<HttpResponse>, Long>, CompletionStage<Integer>> fold = Sink.fold(0,
