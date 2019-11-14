@@ -62,7 +62,7 @@ public class Main {
                                                             });
                                                     Future<Object> result = Patterns.
                                                             ask(controlActor, new GetDataMsg(new  javafx.util.Pair<String, Integer>(data.first(), data.second())), 5000);
-                                                    result.
+                                                    int value = result.value();
                                                     return Source.from(Collections.singleton(pair)).
                                                             toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).

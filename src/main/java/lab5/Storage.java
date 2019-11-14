@@ -20,7 +20,9 @@ public class Storage extends AbstractActor {
                     } else {
                         getSender().tell(-1, ActorRef.noSender());
                     }
-                }).match()
+                }).match(PutDataMsg.class, msg ->{
+                    data.put(msg.getUrl(),new HashMap<>(msg.getReqestNumber(), msg.getTime()));
+        })
                 .build();
     }
 }
