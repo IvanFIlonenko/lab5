@@ -13,8 +13,8 @@ import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import akka.japi.Pair;
 import akka.util.ByteString;
-import com.sun.tools.javac.util.Pair;
 import org.asynchttpclient.Response;
 import scala.concurrent.Future;
 import org.asynchttpclient.*;
@@ -49,18 +49,18 @@ public class Main {
                             try {
                                 Source<Pair<String, Integer>, NotUsed> source = Source.from(Collections.singleton(data));
                                 Flow<Pair<String, Integer>, HttpResponse, NotUsed> flow = Flow.<Pair<String, Integer>>create()
-                                        .map(pair -> new Pair<>(HttpRequest.create().withUri(pair.fst), pair.snd)).
+                                        .map(pair -> new Pair<>(HttpRequest.create().withUri(pair.first()), pair.second())).
                                                 mapAsync(1, pair -> {
                                                     Flow<Pair<HttpRequest, Long>, Pair<Try<HttpResponse>, Long>, NotUsed> httpClient =
                                                             http.superPool(materializer);
                                                     Sink<Pair<Try<HttpResponse>, Long>, CompletionStage<Integer>> fold = Sink.fold(0,
                                                             (accumulator, element) -> {
-                                                                int responseTime = (int) (System.currentTimeMillis() - element.snd);
+                                                                int responseTime = (int) (System.currentTimeMillis() - element.second());
                                                                 return accumulator + responseTime;
                                                             });
                                                     return;
                                                     Source.from(Collections.singleton(pair)).toMat(Flow.<Pair<HttpRequest, Integer>>create().
-                                                            mapConcat(p -> Collections.nCopies(p.snd, p.fst)).
+                                                            mapConcat(p -> Collections.nCopies(p.second(), p.first())).
                                                             map(request2 -> new Pair<>(request2, System.currentTimeMillis())).via(httpClient).toMat(
                                                                     fold, Keep.right()), Keep.right()).run(materializer);
                                                 }).map(sum -> {
