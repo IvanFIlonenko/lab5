@@ -9,6 +9,7 @@ import akka.http.javadsl.ServerBinding;
 import akka.http.javadsl.model.*;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
+import akka.stream.impl.Completed;
 import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
@@ -71,7 +72,7 @@ public class Main {
                                                                                 Response response = whenResponse.get();
                                                                             } catch (InterruptedException | ExecutionException e) {
                                                                             }
-                                                                            Completed
+                                                                            return new Completed();
                                                                         });
                                                             })
                                                             .toMat(
