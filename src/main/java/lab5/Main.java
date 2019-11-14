@@ -17,8 +17,10 @@ import akka.stream.javadsl.Source;
 import akka.japi.Pair;
 import akka.util.ByteString;
 import org.asynchttpclient.Response;
+import scala.concurrent.Await;
 import scala.concurrent.Future;
 import org.asynchttpclient.*;
+import scala.concurrent.duration.Duration;
 import scala.util.Try;
 
 import static org.asynchttpclient.Dsl.*;
@@ -62,7 +64,7 @@ public class Main {
                                                             });
                                                     Future<Object> result = Patterns.
                                                             ask(controlActor, new GetDataMsg(new  javafx.util.Pair<String, Integer>(data.first(), data.second())), 5000);
-                                                    int value = result.value();
+                                                    int value = Await.result(result, Duration.)
                                                     return Source.from(Collections.singleton(pair)).
                                                             toMat(Flow.<Pair<HttpRequest, Integer>>create().
                                                             mapConcat(p -> Collections.nCopies(p.second(), p.first())).
